@@ -188,3 +188,70 @@ We have written Ansible playbooks to automate the installation and configuration
 These playbooks simplify the setup process, enabling quick deployment and consistent configuration of GitLab and Docker across multiple environments.
 
 
+## Bash Script for Testing Deployment
+
+The `deploy-test.sh` script is used to verify that the application has been correctly deployed using Docker. It performs a series of checks to ensure the Docker image and container are running and that the application is accessible. Here's a breakdown of how the script works:
+
+### Script Explanation
+
+1. **Set -e**
+   - The script starts with `set -e`, which tells the shell to exit immediately if any command returns a non-zero status (i.e., if a command fails). This ensures that any errors are caught early, and the script stops execution.
+
+2. **Test 1: Check for Docker Image**
+   - The script defines `IMAGE_NAME` as `35.232.89.185/root/projectt`.
+   - It uses `docker images | grep -q "$IMAGE_NAME"` to search for the image. 
+   - If the image is found, it prints: `"Test 1: Docker image '$IMAGE_NAME' exists."`
+   - If the image is not found, it prints: `"Test 1: Docker image '$IMAGE_NAME' not found!"` and exits the script with an error status.
+
+3. **Test 2: Check for Running Docker Container**
+   - The script sets `CONTAINER_NAME` to `proj11`.
+   - It uses `docker ps | grep -q "$CONTAINER_NAME"` to check if the container is running.
+   - If the container is running, it prints: `"Test 2: Docker container '$CONTAINER_NAME' is running."`
+   - If the container is not running, it prints: `"Test 2: Docker container '$CONTAINER_NAME' is not running!"` and exits with an error.
+
+4. **Test 3: Check Application Accessibility**
+   - The script sets `PORT` to `3000` and uses `curl -s http://localhost:$PORT > /dev/null` to send a request to the application on port 3000.
+   - If the application responds successfully, it prints: `"Test 3: Application is running and responding on port $PORT."`
+   - If there is no response, it prints: `"Test 3: Application is not responding on port $PORT!"` and exits with an error.
+
+5. **Success Message**
+   - If all three tests pass, the script prints: `"All tests passed successfully!"`
+   - This indicates that the Docker image, container, and application are all functioning as expected.
+
+### Purpose of the Script
+
+This script automates the process of checking the health and availability of your Dockerized application. It is useful for ensuring that deployments are successful and that the application is running correctly in the Docker environment.
+
+
+```bash
+#!/bin/bash
+
+set -e
+
+IMAGE_NAME="35.232.89.185/root/projectt"
+if docker images | grep -q "$IMAGE_NAME"; then
+    echo "Test 1: Docker image '$IMAGE_NAME' exists."
+else
+    echo "Test 1: Docker image '$IMAGE_NAME' not found!"
+    exit 1
+fi
+
+CONTAINER_NAME="proj11"
+if docker ps | grep -q "$CONTAINER_NAME"; then
+    echo "Test 2: Docker container '$CONTAINER_NAME' is running."
+else
+    echo "Test 2: Docker container '$CONTAINER_NAME' is not running!"
+    exit 1
+fi
+
+PORT=3000
+if curl -s http://localhost:$PORT > /dev/null; then
+    echo "Test 3: Application is running and responding on port $PORT."
+else
+    echo "Test 3: Application is not responding on port $PORT!"
+    exit 1
+fi
+
+echo "All tests passed successfully!"
+```
+
