@@ -179,11 +179,11 @@ We have written Ansible playbooks to automate the installation and configuration
 
 - **GitLab Installation**: The Ansible playbook automates the entire GitLab setup, including system preparation, installation, and service configuration for version control and CI/CD purposes.
 
-![6](<Screenshot 2024-11-06 114144.png>)
+![7](<Screenshot 2024-11-06 114144.png>)
   
 - **Docker Installation**: Another playbook automates Docker installation and configuration, setting up Docker services and ensuring the system is ready to run containers for the application.
 
-![7](<Screenshot 2024-11-06 114622.png>)
+![8](<Screenshot 2024-11-06 114622.png>)
 
 These playbooks simplify the setup process, enabling quick deployment and consistent configuration of GitLab and Docker across multiple environments.
 
